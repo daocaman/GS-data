@@ -1,0 +1,83 @@
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100%;">
+    <div class="col-md-9">
+
+        <br>
+        <div class="row ">
+            <div class="col-md-12 text-center">
+
+                <h3 class="text-primary ">{{(type=='new')?"Thêm khách hàng":"Chỉnh sửa khách hàng"}}</h3>
+
+                <div *ngIf="loading" class="spinner-border text-primary spinner-border-sm" role="status"> </div>
+            </div>
+        </div>
+        <form [formGroup]="customerForm">
+
+            <div class="row ">
+                <label class="col-md-2 mt-1">Số điện thoại</label>
+                <div class="col-md-2 mt-1">
+                    <input formControlName="B" type="tel" class="form-control ">
+                </div>
+                <label class="col-md-2 mt-1">Xưng danh</label>
+                <div class="col-md-2 mt-1">
+                    <input formControlName="D" type="text" class=" form-control ">
+                </div>
+                <label class="col-md-2 mt-1">Tên thật</label>
+                <div class="col-md-2 mt-1">
+                    <input formControlName="E" type="text" class=" form-control ">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="col-md-2 mt-1">Tên gợi nhớ</label>
+                <div class="col-md-2">
+                    <input formControlName="C" type="text" class="form-control">
+                </div>
+                <label class="col-md-2 mt-1">Giới tính</label>
+                <div class="col-md-2">
+                    <select formControlName="J" class="form-control col-md-2">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                </div>
+                <label class="col-md-2 mt-1">Mã KH</label>
+                <div class="col-md-2">
+                    <input formControlName="A" type="text" class="form-control col-md-2" [attr.disabled]="">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="col-md-2 mt-1">Địa chỉ</label>
+                <div class="col-md-10">
+                    <input formControlName="F" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="row form-group mt-2">
+                <label class="col-md-2 mt-1">Phường/Xã</label>
+                <div class="col-md-2">
+                    <select formControlName="G" class="form-control">
+                        <!-- <option *ngFor="let phuong of dataPhuong; index as i;" value="phuong">{{phuong}}</option> -->
+                        <option value="Phường 4">Phường 4</option>
+                    </select>
+                </div>
+                <label class="col-md-2 mt-1">Quận/Huyện</label>
+                <div class="col-md-2">
+                    <select formControlName="H" class="form-control">
+                        <option *ngFor="let quan of dataQuan; index as i;" [value]="quan">{{quan}}</option>
+                    </select>
+                </div>
+                <label class="col-md-2 mt-1">Nguồn khách hàng</label>
+                <div class="col-md-2">
+                    <select formControlName="I" class="form-control">
+                        <option *ngFor="let kh of dataNguonKH; index as i;" [value]="kh">{{kh}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-12 justify-content-end d-flex" style="padding-right: 4px !important;">
+                    <button *ngIf="type=='edit'" class="btn btn-success m-1">Cập nhật</button>
+                    <button (click)="addNewCustomer()" *ngIf="type=='new'" class="btn btn-primary m-1">Thêm</button>
+                </div>
+            </div>
+        </form>
+        <br><br>
+    </div>
+
+</div>
