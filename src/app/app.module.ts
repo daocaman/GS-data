@@ -8,7 +8,8 @@ import { ChildLayoutComponent } from './child-layout/child-layout.component';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { CustomerFormComponent } from './customer-form/customer-form.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -22,9 +23,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

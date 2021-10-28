@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-child-layout',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChildLayoutComponent implements OnInit {
 
-  constructor() { }
+
+  type: number = 0;
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.type = this.router.url == '/customer' ? 1 : this.type;
+    this.type = this.router.url == '/order' ? 2 : this.type;
   }
 
 }

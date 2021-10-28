@@ -1,1 +1,384 @@
-<p>order-form works!</p>
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100%;background-color: #85FFBD;
+background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
+    <div class="col-md-10">
+        <br>
+        <div class="card">
+            <div class="card-header d-flex ">
+                <h4 class="text-primary">{{f.isEdit.value?'Sửa đơn hàng': 'Thêm đơn hàng'}}</h4>
+                <div *ngIf="loading || _loading" class="spinner-border text-primary spinner-border-sm text-center m-2 " style="align-self: center;" role="status "> </div>
+            </div>
+            <form [formGroup]="orderForm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span *ngIf="orderMessages" class="text-danger">{{orderMessages}}</span>
+                        </div>
+                        <div class=" col-md-3 ">
+                            <div class="custom-control custom-checkbox">
+                                <input formControlName="isEdit" type="checkbox" class="custom-control-input m-1" id="checkEdit">
+                                <label class="custom-control-label" for="checkEdit">Chỉnh sửa đơn hàng</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <input (change)="getDH()" formControlName="maDH" [ngClass]="{'border-danger': f.isEdit.value && f.maDH.value == '' && f.maDH.touched  }" placeholder="Mã đơn hàng" [attr.disabled]="f.isEdit.value?null:''" class="form-control" type="text">
+                        </div>
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Người nhận đơn</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.sale.invalid && f.sale.touched }" formControlName="sale" class="form-control">
+                                <option *ngFor="let sale of SalesData; index as i;" [value]="sale">{{sale}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label>Ngày đặt</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input [ngClass]="{'border-danger': f.orderDate.invalid && f.orderDate.touched }" formControlName="orderDate" class="form-control" type="date">
+                        </div>
+
+                        <div class="col-md-1">
+                            <label>Ngày giao</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input [ngClass]="{'border-danger': f.receivedDate.invalid && f.receivedDate.touched }" formControlName="receivedDate" class="form-control" type="date">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-header d-flex align-items-center">
+                    <h4 class="text-primary">Thông tin sản phẩm</h4>
+                    <div *ngIf="loadingSP" class="spinner-border text-primary spinner-border-sm text-center m-2 " style="align-self: center;" role="status"> </div>
+                    <span *ngIf="messagesSP" class="text-danger mx-1 mb-1"> {{messagesSP}}</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Mã sản phẩm</label>
+                        </div>
+                        <datalist id="MaSP">
+                            <option *ngFor="let sp of IDSPsData; index as i;" [value]="sp.value">
+                        </datalist>
+                        <div class="col-md-2">
+                            <input [ngClass]="{'border-danger': f.maSP.invalid && f.maSP.touched }" (change)="getSP()" list="MaSP" formControlName="maSP" class="form-control" type="text">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Size</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select (change)="getDgSP()" [ngClass]="{'border-danger': f.size.invalid && f.size.touched }" formControlName="size" class="form-control">
+                                <option *ngFor="let size of SizeData; index as i;" [value]="size.value">{{size.value}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Khuôn</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.khuon.invalid && f.khuon.touched }" formControlName="khuon" class="form-control">
+                                <option *ngFor="let khuon of KhuonData; index as i;" [value]="khuon.value">
+                                    {{khuon.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Lớp 1</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.lop1.invalid && f.lop1.touched }" formControlName="lop1" class="form-control">
+                                <option *ngFor="let lop of Lop1Data; index as i;" [value]="lop">{{lop}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Lớp 2</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.lop2.invalid && f.lop2.touched }" formControlName="lop2" class="form-control">
+                                <option *ngFor="let lop of Lop2Data; index as i;" [value]="lop">{{lop}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Lớp 3</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.lop3.invalid && f.lop3.touched }" formControlName="lop3" class="form-control">
+                                <option *ngFor="let lop of Lop3Data; index as i;" [value]="lop">{{lop}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Đối tượng/Dịp</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select [ngClass]="{'border-danger': f.doiTuong.invalid && f.doiTuong.touched }" formControlName="doiTuong" class="form-control">
+                                <option *ngFor="let dt of DoituongData; index as i;" [value]="dt.value">{{dt.value}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Đơn giá</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="applyFormat('dgSP')" [ngClass]="{'border-danger': f.dgSP.invalid && f.dgSP.touched }" formControlName="dgSP" class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Số lượng</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input [ngClass]="{'border-danger': f.numSP.invalid && f.numSP.touched }" (change)="caculateMoney()" formControlName="numSP" class="form-control" min="1" type="number">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Ghi chữ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input [ngClass]="{'border-danger': f.contentSP.invalid && f.contentSP.touched }" formControlName="contentSP" class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Ghi chú SP</label>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea [ngClass]="{'border-danger': f.noteSP.invalid && f.noteSP.touched }" formControlName="noteSP" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-header">
+                    <h4 class="text-primary">Phụ kiện</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Flan</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="flan" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Phô mai</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="phomai" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>In ảnh</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="anh" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Nến</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input formControlName="nen" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Muỗng dĩa</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="muong" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Pháo sáng</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="phao" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Nón</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="caculatePK()" formControlName="non" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Bịch lông</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input formControlName="bich" type="number" max="20" step="1" min="0" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Tổng mua kèm</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)="applyFormat('sumPK')" formControlName="sumPK" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header d-flex" style="justify-content: space-between;">
+                    <div class="d-flex align-items-center">
+                        <h4 class="text-primary">Thông tin giao hàng</h4>
+                        <div *ngIf="loadingCustomer" class="spinner-border text-primary spinner-border-sm text-center m-2" style="align-self: center;" role="status "> </div>
+                        <span *ngIf="messageCustomer" class="text-danger mx-1 mb-1">{{messageCustomer}}</span>
+                    </div>
+                    <a (click)="addCustomer()" class="float-right btn btn-success">+ Thêm khách hàng</a>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Số điện thoại</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input minlength="10" maxlength="10" [ngClass]="{'border-danger': f.phone.invalid && f.phone.touched }" (change)="getCustomer()" formControlName="phone" type="tel" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Tên</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input [ngClass]="{'border-danger': f.name.invalid && f.name.touched }" formControlName="name" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Phí giao hàng</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input [ngClass]="{'border-danger': f.feeShip.invalid && f.feeShip.touched }" formControlName="feeShip" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Địa chỉ</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input [ngClass]="{'border-danger': f.address.invalid && f.address.touched }" formControlName="address" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Quận/Huyện</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.quan.invalid && f.quan.touched }" (change)="getShip()" formControlName="quan" class="form-control">
+                                <option *ngFor="let quan of QuanData; index as i;" [value]="i">{{quan.quan}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Phường/Xã</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.phuong.invalid && f.phuong.touched }" (change)="getShip()" formControlName="phuong" class="form-control">
+                                <option *ngFor="let phuong of PhuongData; index as i;" [value]="i">{{phuong.name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label>Giờ giao</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <select [ngClass]="{'border-danger': f.gioGiao.invalid && f.gioGiao.touched }" formControlName="gioGiao" class="form-control">
+                                    <option *ngFor="let h of hours; index as i;" [value]="h">{{h}}</option>
+                                </select>
+                                <p class="m-2">:</p>
+                                <select [ngClass]="{'border-danger': f.phutGiao.invalid && f.phutGiao.touched }" formControlName="phutGiao" class="form-control">
+                                    <option value="00">00</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Ghi chú GH</label>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea [ngClass]="{'border-danger': f.noteGH.invalid && f.noteGH.touched }" formControlName="noteGH" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header">
+                    <h4 class="text-primary">Thông tin thanh toán</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Tổng tiền</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input [attr.disabled]="''" formControlName="tongTien" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Giảm</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input (change)=giamChange() formControlName="giam" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="custom-control custom-checkbox">
+                                <input (change)="caculateVat()" type="checkbox" class="custom-control-input m-1" id="checkVAT">
+                                <label class="custom-control-label" for="checkVAT">VAT (10%)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input [attr.disabled]="''" formControlName="VAT" type="text" class="form-control">
+                        </div>
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Thành tiền</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input [attr.disabled]="''" formControlName="thanhTien" formControlName="thanhTien" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <label>HT Thanh toán</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.htThanhToan.invalid && f.htThanhToan.touched }" formControlName="htThanhToan" class="form-control">
+                                <option *ngFor="let ht of HTTTData; index as i;" [value]="ht">{{ht}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Đã thanh toán?</label>
+                        </div>
+                        <div class="col-md-2 ">
+                            <input formControlName="isPaid" type="checkbox">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <label>Ghi chú đơn hàng</label>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea formControlName="noteDH" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="messages" class="row my-1 mb-1">
+                        <div class="col-md-12">
+                            <span [ngClass]="{'text-danger': error, 'text-success':  !error }">{{messages}}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+
+                        <div class="col-6">
+                            <button (click)="backPage()" class="btn btn-info" style="color: #fff">Trở về</button>
+                        </div>
+                        <div class="col-6 justify-content-end text-left d-flex" style="padding-right: 4px !important;">
+                            <button *ngIf="f.isEdit.value" (click)="cancelOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-warning m-1">Hủy đơn hàng</button>
+                            <button *ngIf="f.isEdit.value" (click)="editOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-success m-1">Cập nhật</button>
+                            <button *ngIf="!f.isEdit.value" (click)="addOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-primary m-1">Thêm</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <br>
+    </div>
+</div>

@@ -1,82 +1,112 @@
-<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100%;">
-    <div class="col-md-9">
-
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100%;background-color: #85FFBD;
+background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
+    <div class="col-md-10">
         <br>
-        <div class="row ">
-            <div class="col-md-12 text-center">
 
-                <h3 class="text-primary ">{{(type=='new')?"Thêm khách hàng":"Chỉnh sửa khách hàng"}}</h3>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
 
-                <div *ngIf="loading" class="spinner-border text-primary spinner-border-sm" role="status"> </div>
+                <div class="d-flex">
+                    <h4 class="text-primary">Thêm/Chỉnh sửa khách hàng</h4>
+                    <div *ngIf="loading || _loading" class="spinner-border text-primary spinner-border-sm text-center m-2 " style="align-self: center;" role="status "> </div>
+                </div>
+
+                <button (click)="clearData()" class="btn  rounded">
+                    <i [ngClass]="{'fa-spin': _refresh }" class="fa fa-refresh "></i> 
+                    Làm mới
+                </button>
+
+            </div>
+
+            <div class="card-body ">
+                <form [formGroup]="customerForm ">
+
+                    <div class="row ">
+                        <label class="col-md-2 mt-1 ">Số điện thoại</label>
+                        <div class="col-md-2 mt-1 ">
+                            <input minlength="10" (change)="getCustomer()" [ngClass]="{'border-danger': f.phone.invalid && f.phone.touched}" formControlName="phone" type="tel" class="form-control ">
+                        </div>
+                        <label class="col-md-2 mt-1 ">Xưng danh</label>
+                        <div class="col-md-2 mt-1 ">
+                            <select [ngClass]="{'border-danger': f.name2.invalid && f.name2.touched}" formControlName="name2" class="form-control">
+                                <option value="Anh">Anh</option>
+                                <option value="Chị">Chị</option>
+                                <option value="Cô">Cô</option>
+                                <option value="Chú">Chú</option>
+                            </select>
+                        </div>
+                        <label class="col-md-2 mt-1 ">Tên thật</label>
+                        <div class="col-md-2 mt-1 ">
+                            <input [ngClass]="{'border-danger': f.name.invalid && f.name.touched}" formControlName="name" type="text" class=" form-control">
+                        </div>
+                    </div>
+                    <div class="row mt-2 ">
+                        <label class="col-md-2 mt-1 ">Tên gợi nhớ</label>
+                        <div class="col-md-2 ">
+                            <input [ngClass]="{'border-danger': f.name1.invalid && f.name1.touched}" formControlName="name1" type="text" class="form-control">
+                        </div>
+                        <label class="col-md-2 mt-1 ">Giới tính</label>
+                        <div class="col-md-2 ">
+                            <select [ngClass]="{'border-danger': f.gt.invalid && f.gt.touched}" formControlName="gt" class="form-control col-md-2 ">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+                        <label class="col-md-2 mt-1">Mã KH</label>
+                        <div class="col-md-2 ">
+                            <input formControlName="idKH" type="text" class="form-control col-md-2" [attr.disabled]="''">
+                        </div>
+                    </div>
+                    <div class="row mt-2 ">
+                        <label class="col-md-2 mt-1">Địa chỉ</label>
+                        <div class="col-md-10">
+                            <input [ngClass]="{'border-danger': f.address.invalid && f.address.touched}" formControlName="address" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group mt-2">
+                        <label class="col-md-2 mt-1">Quận/Huyện</label>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.quan.invalid && f.quan.touched}" formControlName="quan" (onChange)="resetPhuong()" class="form-control">
+                                <option *ngFor="let quan of dataQuan; index as i;" [value]="i">{{quan.quan}}</option>
+                            </select>
+                        </div>
+
+                        <label class="col-md-2 mt-1">Phường/Xã</label>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.phuong.invalid && f.phuong.touched}" formControlName="phuong" class="form-control">
+                                <option *ngFor="let phuong of dataPhuong; index as i; " [value]="i">{{phuong.name}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <label class="col-md-2 mt-1">Nguồn khách hàng</label>
+                        <div class="col-md-2">
+                            <select [ngClass]="{'border-danger': f.nguonKh.invalid && f.nguonKh.touched}" formControlName="nguonKh" class="form-control">
+                                <option *ngFor="let kh of dataNguonKH; index as i;" [value]="kh">{{kh}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div *ngIf="messages" class="row mt-1">
+                        <div class="col-md-12">
+                            <span [ngClass]="{'text-success': !error, 'text-danger':  error }" style="align-self: center; ">{{messages}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+
+                        <div class="col-6">
+                            <button (click)="backPage()" class="btn btn-info" style="color: #fff">Trở về</button>
+                        </div>
+                        <div class="col-6 justify-content-end text-left d-flex" style="padding-right: 4px !important;">
+                            <button *ngIf="type=='edit'" (click)="editCustomer()" [attr.disabled]="isSubmit?'':null" class="btn btn-success m-1">Cập nhật</button>
+                            <button *ngIf="type=='new'" (click)="addNewCustomer()" [attr.disabled]="isSubmit?'':null" class="btn btn-primary m-1">Thêm</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <form [formGroup]="customerForm">
 
-            <div class="row ">
-                <label class="col-md-2 mt-1">Số điện thoại</label>
-                <div class="col-md-2 mt-1">
-                    <input formControlName="B" type="tel" class="form-control ">
-                </div>
-                <label class="col-md-2 mt-1">Xưng danh</label>
-                <div class="col-md-2 mt-1">
-                    <input formControlName="D" type="text" class=" form-control ">
-                </div>
-                <label class="col-md-2 mt-1">Tên thật</label>
-                <div class="col-md-2 mt-1">
-                    <input formControlName="E" type="text" class=" form-control ">
-                </div>
-            </div>
-            <div class="row mt-2">
-                <label class="col-md-2 mt-1">Tên gợi nhớ</label>
-                <div class="col-md-2">
-                    <input formControlName="C" type="text" class="form-control">
-                </div>
-                <label class="col-md-2 mt-1">Giới tính</label>
-                <div class="col-md-2">
-                    <select formControlName="J" class="form-control col-md-2">
-                        <option value="Nam">Nam</option>
-                        <option value="Nữ">Nữ</option>
-                    </select>
-                </div>
-                <label class="col-md-2 mt-1">Mã KH</label>
-                <div class="col-md-2">
-                    <input formControlName="A" type="text" class="form-control col-md-2" [attr.disabled]="">
-                </div>
-            </div>
-            <div class="row mt-2">
-                <label class="col-md-2 mt-1">Địa chỉ</label>
-                <div class="col-md-10">
-                    <input formControlName="F" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="row form-group mt-2">
-                <label class="col-md-2 mt-1">Phường/Xã</label>
-                <div class="col-md-2">
-                    <select formControlName="G" class="form-control">
-                        <!-- <option *ngFor="let phuong of dataPhuong; index as i;" value="phuong">{{phuong}}</option> -->
-                        <option value="Phường 4">Phường 4</option>
-                    </select>
-                </div>
-                <label class="col-md-2 mt-1">Quận/Huyện</label>
-                <div class="col-md-2">
-                    <select formControlName="H" class="form-control">
-                        <option *ngFor="let quan of dataQuan; index as i;" [value]="quan">{{quan}}</option>
-                    </select>
-                </div>
-                <label class="col-md-2 mt-1">Nguồn khách hàng</label>
-                <div class="col-md-2">
-                    <select formControlName="I" class="form-control">
-                        <option *ngFor="let kh of dataNguonKH; index as i;" [value]="kh">{{kh}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row mt-1">
-                <div class="col-md-12 justify-content-end d-flex" style="padding-right: 4px !important;">
-                    <button *ngIf="type=='edit'" class="btn btn-success m-1">Cập nhật</button>
-                    <button (click)="addNewCustomer()" *ngIf="type=='new'" class="btn btn-primary m-1">Thêm</button>
-                </div>
-            </div>
-        </form>
         <br><br>
     </div>
 

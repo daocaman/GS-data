@@ -9,19 +9,11 @@ const routes: Routes = [
     component: MainLayoutComponent
   },
   {
-    path: 'new-customer',
+    path: 'customer',
     component: ChildLayoutComponent
   },
   {
-    path: 'edit-customer',
-    component: ChildLayoutComponent
-  },
-  {
-    path: 'new-order',
-    component: ChildLayoutComponent
-  },
-  {
-    path: 'edit-order',
+    path: 'order',
     component: ChildLayoutComponent
   }
 

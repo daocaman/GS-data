@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GsService } from '../gs.service';
 
 @Component({
@@ -8,18 +9,20 @@ import { GsService } from '../gs.service';
 })
 export class MainLayoutComponent implements OnInit {
 
-
   constructor(
-    private _gs: GsService
-  ) { }
+    private _gs: GsService,
+    private _route: Router
+  ) {
+    if (this._gs.currentURL) {
+      this._gs.previousURL = this._gs.currentURL;
+    }
+    this._gs.currentURL = this._route.url;
+  }
 
   ngOnInit(): void {
+
     if (!this._gs.haveCrawlData) {
-      //debug
-      console.log('\x1b[33m test :\x1b[0m');
       this._gs.getInfoData();
-    } else {
-      console.log('\x1b[33m quan :\x1b[0m', this._gs.quan);
     }
   }
 
