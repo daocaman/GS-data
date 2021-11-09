@@ -27,6 +27,8 @@ export class CustomerFormComponent implements OnInit {
 
   fromOrder: boolean = false;
 
+  lenPhone = "";
+
   customerForm: FormGroup = new FormGroup({
     idKH: new FormControl(""),
     phone: new FormControl("", Validators.required),
@@ -55,7 +57,12 @@ export class CustomerFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let ssUser = window.sessionStorage.getItem("user");
 
+    if(!ssUser){
+      this._route.navigateByUrl("/login");
+    }
+    this.messages = "";
     if (!this._gs.haveCrawlData) {
       this._gs.getInfoData();
     }
@@ -166,6 +173,10 @@ export class CustomerFormComponent implements OnInit {
   getCustomer() {
 
     let tmpPhone = this.customerForm.get("phone")?.value;
+
+    tmpPhone = tmpPhone.replace(/\s+/g, '');
+
+    this.lenPhone = tmpPhone.length;
 
     if (tmpPhone && tmpPhone.length >= 10 && this.type == 'new') {
       this._loading = true;

@@ -1,0 +1,41 @@
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100%;background-color: #85FFBD;
+background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
+    <div class="col-md-5">
+        <br>
+        <div class="card">
+            <div class="card-header text-center">
+                <img class="img-fluid p-1" width="15%" height="50%" src="assets/Logo.jpg" alt="Logo">
+            </div>
+            <form [formGroup]="loginForm">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Email:</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input [ngClass]="{'border-danger': f.username.invalid && f.username.touched}" formControlName="username" type="email" class="form-control">
+                            </div>
+
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                <label>Mật khẩu:</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input [ngClass]="{'border-danger': f.password.invalid && f.password.touched}" formControlName="password" type="password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-9">
+                                <span *ngIf="messages" class="text-danger">{{messages}}</span>
+                            </div>
+                            <div class="col-md-3 justify-content-end">
+                                <button (click)="login()" class="btn btn-primary">Đăng nhập</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

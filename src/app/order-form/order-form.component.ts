@@ -5,6 +5,8 @@ import { GsService } from '../gs.service';
 import { formatDate } from '@angular/common';
 import { SanPham } from '../san-pham';
 import { NavigationEnd, Router } from '@angular/router';
+import { DialogService } from '../dialog.service';
+import { HoaDonComponent } from '../hoa-don/hoa-don.component';
 
 @Component({
   selector: 'app-order-form',
@@ -28,6 +30,8 @@ export class OrderFormComponent implements OnInit {
   orderMessages: string = '';
 
   editOrderId: any = null;
+
+  statusDH = "";
 
   orderForm: FormGroup = new FormGroup({
     isEdit: new FormControl(false),
@@ -59,7 +63,7 @@ export class OrderFormComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     name1: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
-    feeShip: new FormControl('', Validators.required),
+    feeShip: new FormControl(''),
     address: new FormControl('', Validators.required),
     quan: new FormControl('', Validators.required),
     phuong: new FormControl('', Validators.required),
@@ -71,7 +75,7 @@ export class OrderFormComponent implements OnInit {
     VAT: new FormControl(''),
     giam: new FormControl(''),
     thanhTien: new FormControl('', Validators.required),
-    htThanhToan: new FormControl('', Validators.required),
+    htThanhToan: new FormControl('Tiền mặt', Validators.required),
     isPaid: new FormControl(false, Validators.required),
     noteDH: new FormControl('')
   })
@@ -94,14 +98,21 @@ export class OrderFormComponent implements OnInit {
     private _gs: GsService,
     private _currency: CurrencyPipe,
     private _route: Router,
+    private _dialog: DialogService
   ) {
     if (this._gs.currentURL) {
       this._gs.previousURL = this._gs.currentURL;
     }
     this._gs.currentURL = this._route.url;
+
   }
 
   ngOnInit(): void {
+
+    this.messageCustomer = "";
+    this.messages = "";
+    this.orderMessages = "";
+    this.messagesSP = "";
     if (!this._gs.haveCrawlData) {
       this._gs.getInfoData();
     }
@@ -121,6 +132,10 @@ export class OrderFormComponent implements OnInit {
             this.getCustomer();
             window.localStorage.removeItem("newPhone");
           }
+          this.getSP();
+          this.orderForm.patchValue(
+            {dgSP: tmpForm.dgSP}
+          );
           window.localStorage.removeItem("formOrder");
         }
       }
@@ -136,6 +151,8 @@ export class OrderFormComponent implements OnInit {
 
   applyFormat(control: any) {
     let tmp = this.orderForm.get(control)?.value;
+    tmp = tmp.replaceAll(",", "");
+    tmp = parseInt(tmp);
     this.orderForm.get(control)?.setValue(this._currency.transform(tmp, 'VND', ''));
     this.caculateVat();
     this.caculateMoney();
@@ -166,7 +183,7 @@ export class OrderFormComponent implements OnInit {
 
       let fee = (tmpForm.feeShip == "" || tmpForm.feeShip == null) ? 0 : parseInt(tmpForm.feeShip.replaceAll(",", ""));
 
-      let giam = (tmpForm.giam == "" || tmpForm.feeShip == null) ? 0 : parseInt(tmpForm.giam.replaceAll(",", ""));
+      let giam = (tmpForm.giam == "" || tmpForm.giam == null) ? 0 : parseInt(tmpForm.giam.replaceAll(",", ""));
 
       let tongTien = sumSP + pk + fee;
 
@@ -271,6 +288,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   getDH() {
+    this.statusDH = "";
     let formVal = Object.assign({}, this.orderForm.value);
     this.orderMessages = "";
 
@@ -282,6 +300,7 @@ export class OrderFormComponent implements OnInit {
             this.orderMessages = "Không tìm thấy đơn hàng!";
           } else {
 
+            this.statusDH = res.data[0][1];
             let tmpQuan = this._gs.fee.findIndex(e => e.quan == res.data[0][29]);
 
             let tmpPhuong = this._gs.fee[tmpQuan].phuong.findIndex((e: any) => e.name == res.data[0][28]);
@@ -348,6 +367,10 @@ export class OrderFormComponent implements OnInit {
       this._loading = false;
     }
 
+  }
+
+  get isEdit() {
+    return this.orderForm.get("isEdit")?.value == true;
   }
 
   get f() {
@@ -520,17 +543,6 @@ export class OrderFormComponent implements OnInit {
 
   }
 
-  giamChange() {
-    let tmpGiam = this.orderForm.get("giam")?.value;
-
-    this.orderForm.patchValue({
-      giam: this._currency.transform(tmpGiam, 'VND', '')
-    });
-
-    this.caculateVat();
-    this.caculateMoney();
-  }
-
   addOrder() {
 
     this.isSubmit = true;
@@ -583,14 +595,30 @@ export class OrderFormComponent implements OnInit {
         noteDH: dataForm.noteDH
       }
 
+      // this._dialog.openModal(HoaDonComponent, {
+      //   initialState: {
+      //     value: postData,
+      //     callBack: () => { this.messages = "Thêm đơn thành công"; setTimeout(() => { this._route.navigateByUrl("/") }, 1500) }
+      //   },
+      //   class: 'modal-lg',
+      //   ignoreBackdropClick: true
+      // });
+
       this._gs.addOrder(postData).subscribe(
         (res: any) => {
           this.orderForm.patchValue({
             maDH: res.data
           })
           this.isSubmit = false;
-          this.messages = "Thêm đơn thành công";
-          setTimeout(() => { this.messages = "", this._route.navigateByUrl("/") }, 1500);
+
+          this._dialog.openModal(HoaDonComponent, {
+            initialState: {
+              value: postData,
+              submitCall: () => { this.messages = "Thêm đơn thành công"; setTimeout(() => { this._route.navigateByUrl("/") }, 1500) },
+            },
+            class: 'modal-lg',
+            ignoreBackdropClick: true
+          });
 
         }
       )
@@ -653,10 +681,27 @@ export class OrderFormComponent implements OnInit {
         orderIdx: this.editOrderId
       }
 
+      // this._dialog.openModal(HoaDonComponent, {
+      //   initialState: {
+      //     value: postData,
+      //     callBack: () => { this.messages = "Cập nhật đơn thành công"; setTimeout(() => { this._route.navigateByUrl("/") }, 1500) }
+      //   },
+      //   class: 'modal-lg',
+      //   ignoreBackdropClick: true
+      // });
+
       this._gs.editOrder(postData).subscribe(
         (res) => {
-          this.messages = "Cập nhật đơn thành công";
-          setTimeout(() => { this.messages = ""; this._route.navigateByUrl("/"); }, 1500);
+
+          this._dialog.openModal(HoaDonComponent, {
+            initialState: {
+              value: postData,
+              submitCall: () => { this.messages = "Cập nhật đơn thành công"; setTimeout(() => { this._route.navigateByUrl("/") }, 1500) }
+            },
+            class: 'modal-lg',
+            ignoreBackdropClick: true
+          });
+
         }
       )
 
@@ -666,4 +711,16 @@ export class OrderFormComponent implements OnInit {
     this.isSubmit = false;
   }
 
+  resetForm() {
+    if (this.orderForm.get("isEdit")?.value == false) {
+      this.orderForm.reset();
+      this.orderForm.patchValue({
+        isEdit: false,
+        orderDate: formatDate(this.nowDate, "YYYY-MM-dd", 'en'),
+        quan: "",
+        phuong: "",
+        htThanhToan: "Tiền mặt"
+      });
+    }
+  }
 }

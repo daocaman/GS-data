@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { map, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -42,13 +43,20 @@ export class GsService {
 
   currentURL = "";
 
-  deploy_key = "AKfycbwUvA2QeS6ZGR_EyHrkOBxfYmRlWTxQIRhGW-fs3-VuCvL9uC2jth_i9Ne9hSaHsVQItA";
+  deploy_key = "AKfycbxoJBo6RIbGliRTaHcVYq2KzpiMZsCOvPMwHewLPabyoeQg6ReFKbrmkdvrUKmm9OkVxA";
 
   constructor(
-    private _api: ApiService
+    private _api: ApiService,
+    private _route: Router
   ) { }
 
   getInfoData() {
+
+    let ssUser = window.sessionStorage.getItem("user");
+
+    if(!ssUser){
+      this._route.navigateByUrl("/login");
+    }
 
     this.haveCrawlData = true;
 
@@ -127,6 +135,7 @@ export class GsService {
 
     this._api.get(this.deploy_key, 'exec', { data: 'info' }).subscribe
       ((res: any) => {
+
         this.haveCrawlData = true;
 
         for (let i = 0; i < res.data.dataShipFee.length; i++) {
@@ -191,7 +200,6 @@ export class GsService {
         }
         window.localStorage.setItem("khuon", JSON.stringify(this.khuon));
 
-
         for (let i = 0; i < res.data.dataNhom.length; i++) {
           if (res.data.dataNhom[i][1]) {
             this.nhom.push({ id: res.data.dataNhom[i][0], value: res.data.dataNhom[i][1] });
@@ -241,35 +249,39 @@ export class GsService {
   }
 
   addCustomer(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'add-customer', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "add-customer", ...data });
   }
 
   addOrder(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'add-order', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "add-order", ...data });
   }
 
   cancelOrder(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'cancel-order', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "cancel-order", ...data });
   }
 
   getCustomer(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'get-customer', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "get-customer", ...data });
   }
 
   getSP(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'get-sp', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "get-sp", ...data });
   }
 
   getOrder(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'get-order', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "get-order", ...data });
   }
 
   editCustomer(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'edit-customer', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "edit-customer", ...data });
   }
 
   editOrder(data: any) {
-    return this._api.get(this.deploy_key, 'exec', { data: 'edit-order', ...data });
+    return this._api.get(this.deploy_key, 'exec', { data: "edit-order", ...data });
+  }
+
+  login(data: any) {
+    return this._api.get(this.deploy_key, 'exec', { data: 'login', ...data });
   }
 
 }

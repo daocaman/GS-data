@@ -12,7 +12,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                 </div>
 
                 <button (click)="clearData()" class="btn  rounded">
-                    <i [ngClass]="{'fa-spin': _refresh }" class="fa fa-refresh "></i> 
+                    <i [ngClass]="{'fa-spin': _refresh }" class="fa fa-refresh "></i>
                     Làm mới
                 </button>
 
@@ -22,9 +22,9 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                 <form [formGroup]="customerForm ">
 
                     <div class="row ">
-                        <label class="col-md-2 mt-1 ">Số điện thoại</label>
+                        <label class="col-md-2 mt-1 ">Số điện thoại {{(lenPhone)? "("+lenPhone+")":""}}</label>
                         <div class="col-md-2 mt-1 ">
-                            <input minlength="10" (change)="getCustomer()" [ngClass]="{'border-danger': f.phone.invalid && f.phone.touched}" formControlName="phone" type="tel" class="form-control ">
+                            <input minlength="10" maxlength="13" (change)="getCustomer()" [ngClass]="{'border-danger': f.phone.invalid && f.phone.touched}" formControlName="phone" type="tel" class="form-control ">
                         </div>
                         <label class="col-md-2 mt-1 ">Xưng danh</label>
                         <div class="col-md-2 mt-1 ">

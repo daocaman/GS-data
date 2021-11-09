@@ -9,6 +9,8 @@ import { GsService } from '../gs.service';
 })
 export class MainLayoutComponent implements OnInit {
 
+  _refresh: boolean = false;
+
   constructor(
     private _gs: GsService,
     private _route: Router
@@ -24,6 +26,11 @@ export class MainLayoutComponent implements OnInit {
     if (!this._gs.haveCrawlData) {
       this._gs.getInfoData();
     }
+  }
+
+  refreshData(){
+    this._refresh = true;
+    this._gs.getInfoData();
   }
 
 }

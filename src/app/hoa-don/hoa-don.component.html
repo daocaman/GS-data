@@ -1,0 +1,109 @@
+<div id="printPlace" class="modal-body">
+    <div class="table-responsive">
+        <table class=" table-bordered border border-dark" style="font-size: 0.7rem;">
+            <tbody>
+                <tr>
+                    <td rowspan="3" colspan="2" class="col-2">
+                        <img class="img-fluid p-1" src="assets/Logo.jpg" alt="Logo">
+                    </td>
+                    <td colspan="5" class="text-center">
+                        <b>Rau câu Gelli</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">Đ/thoại: 0909.599.151 - 0909.7123.25 (Zalo/Viber)</td>
+                </tr>
+                <tr>
+                    <td colspan="5">W: banhsinhnhatraucau.com - F: fb.com/raucau3dgelli</td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="bd-gray-300 text-center"><b>HÓA ĐƠN BÁN
+                            LẺ</b> </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center text-danger"><i>{{strDate}}</i></td>
+                    <td>Mã đơn:</td>
+                    <td class="text-center bd-gray-300">{{value.maDH}}</td>
+                    <td class="bd-gray-300"></td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center"><b>Người mua: {{value.name}}</b></td>
+                    <td colspan="3" class="text-center">Số điện thoại: {{value.phone}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7">Địa chỉ: {{value.address+", "+value.phuong+", "+value.quan}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">{{value.noteGH}}</td>
+                    <td colspan="3" class="text-center"><b>Thanh toán: {{value.htThanhToan}}</b></td>
+                </tr>
+
+                <tr style="background-color: #e9ecef;">
+                    <td class="text-center">STT</td>
+                    <td class="text-center">Sản phẩm</td>
+                    <td class="text-center">Đơn giá</td>
+                    <td class="text-center">SL</td>
+                    <td class="text-center">Thành tiền</td>
+                    <td class="text-center">Chi tiết đơn hàng</td>
+                    <td class="text-center">Ghi chú sản phẩm</td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="text-center">{{"Rau câu "+value.maDH+" - "+value.size+"cm"+" - "+value.khuon}}</td>
+                    <td class="text-center">{{value.dgSP|currency:'VND':''}}</td>
+                    <td class="text-center">{{value.numSP}}</td>
+                    <td class="text-center">{{value.dgSP * value.numSP |currency:'VND':''}}</td>
+                    <td class="text-center">{{value.contentSP}}</td>
+                    <td class="text-center">{{value.noteSP}}</td>
+                </tr>
+                <tr>
+                    <td class="text-center">2</td>
+                    <td class="text-center">Tổng mua phụ kiện đi kèm</td>
+                    <td class="text-center">{{value.sumPK|currency:'VND':''}}</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">{{value.sumPK|currency:'VND':''}}</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td class="text-center">Phí giao hàng</td>
+                    <td class="text-center">{{value.feeShip|currency:'VND':''}}</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">{{value.feeShip|currency:'VND':''}}</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="4">Tạm tính</td>
+                    <td class="text-center text-danger" colspan="3">{{sum|currency:'VND':''}}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="4">Giảm trừ (-)</td>
+                    <td class="text-center" colspan="3">{{value.giam|currency:'VND':''}}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="4">VAT (10%) (+)</td>
+                    <td class="text-center" colspan="3">{{value.VAT|currency:'VND':''}}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center" colspan="4">Tổng cộng</td>
+                    <td class="text-center" colspan="3"><b>{{value.thanhTien|currency:'VND':''}}</b></td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="4">Người mua</td>
+                    <td class="text-center" colspan="3">Người bán</td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="text-center">Vui lòng kiểm tra kỹ đơn hàng & sản phẩm trước khi giao tiền!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" (click)="confirm()">Xác nhận</button>
+    <button (click)="closeModal()" type="button" class="btn btn-default">Close</button>
+</div>

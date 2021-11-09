@@ -12,10 +12,11 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                     <div class="row">
                         <div class="col-md-6">
                             <span *ngIf="orderMessages" class="text-danger">{{orderMessages}}</span>
+                            <span *ngIf="statusDH=='Hủy'" class="text-danger">Đơn hàng này đang bị hủy</span>
                         </div>
                         <div class=" col-md-3 ">
                             <div class="custom-control custom-checkbox">
-                                <input formControlName="isEdit" type="checkbox" class="custom-control-input m-1" id="checkEdit">
+                                <input (change)="resetForm()" formControlName="isEdit" type="checkbox" class="custom-control-input m-1" id="checkEdit">
                                 <label class="custom-control-label" for="checkEdit">Chỉnh sửa đơn hàng</label>
                             </div>
                         </div>
@@ -44,7 +45,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <label>Ngày giao</label>
                         </div>
                         <div class="col-md-3">
-                            <input [ngClass]="{'border-danger': f.receivedDate.invalid && f.receivedDate.touched }" formControlName="receivedDate" class="form-control" type="date">
+                            <input [ngClass]="{'border-danger': f.receivedDate.invalid && f.receivedDate.touched }" formControlName="receivedDate" class="form-control" type="date" min="{{f.orderDate.value | date:'yyyy-MM-dd'}}">
                         </div>
                     </div>
 
@@ -126,7 +127,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <label>Đơn giá</label>
                         </div>
                         <div class="col-md-2">
-                            <input (change)="applyFormat('dgSP')" [ngClass]="{'border-danger': f.dgSP.invalid && f.dgSP.touched }" formControlName="dgSP" class="form-control" type="text">
+                            <input (change)="applyFormat('dgSP')" [ngClass]="{'border-danger': f.dgSP.invalid && f.dgSP.touched }" formControlName="dgSP" class="form-control currency" type="text">
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -216,7 +217,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <label>Tổng mua kèm</label>
                         </div>
                         <div class="col-md-2">
-                            <input (change)="applyFormat('sumPK')" formControlName="sumPK" type="text" class="form-control">
+                            <input (change)="applyFormat('sumPK')" formControlName="sumPK" type="text" class="form-control currency">
                         </div>
                     </div>
                 </div>
@@ -246,7 +247,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <label>Phí giao hàng</label>
                         </div>
                         <div class="col-md-2">
-                            <input [ngClass]="{'border-danger': f.feeShip.invalid && f.feeShip.touched }" formControlName="feeShip" type="text" class="form-control">
+                            <input (change)="applyFormat('feeShip')" [ngClass]="{'border-danger': f.feeShip.invalid && f.feeShip.touched }" formControlName="feeShip" type="text" class="form-control currency">
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -316,7 +317,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <label>Giảm</label>
                         </div>
                         <div class="col-md-2">
-                            <input (change)=giamChange() formControlName="giam" type="text" class="form-control">
+                            <input (change)="applyFormat('giam')" formControlName="giam" type="text" class="form-control">
                         </div>
                         <div class="col-md-2">
                             <div class="custom-control custom-checkbox">
@@ -370,7 +371,7 @@ background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);">
                             <button (click)="backPage()" class="btn btn-info" style="color: #fff">Trở về</button>
                         </div>
                         <div class="col-6 justify-content-end text-left d-flex" style="padding-right: 4px !important;">
-                            <button *ngIf="f.isEdit.value" (click)="cancelOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-warning m-1">Hủy đơn hàng</button>
+                            <button *ngIf="f.isEdit.value && statusDH!='Hủy'" (click)="cancelOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-warning m-1">Hủy đơn hàng</button>
                             <button *ngIf="f.isEdit.value" (click)="editOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-success m-1">Cập nhật</button>
                             <button *ngIf="!f.isEdit.value" (click)="addOrder()" [attr.disabled]="isSubmit?'':null" class="btn btn-primary m-1">Thêm</button>
                         </div>
