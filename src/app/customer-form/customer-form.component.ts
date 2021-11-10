@@ -141,13 +141,12 @@ export class CustomerFormComponent implements OnInit {
 
           this.customerForm.patchValue({ 'idKH': res.data })
           this.messages = "Thêm thành công!";
-          if (this.fromOrder) {
-            window.localStorage.setItem("newPhone", postData.phone);
-          }
-
+        
+          
           setTimeout(() => {
             this.messages = "";
             if (this.fromOrder) {
+              window.localStorage.setItem("newPhone", postData.phone);
               this._route.navigateByUrl("/order");
             } else {
               this._route.navigateByUrl("/");
@@ -254,6 +253,7 @@ export class CustomerFormComponent implements OnInit {
           setTimeout(() => {
             this.messages = "";
             if (this.fromOrder) {
+              window.localStorage.setItem("newPhone", postData.phone);
               this._route.navigateByUrl("/order");
             } else {
               this._route.navigateByUrl("/");
