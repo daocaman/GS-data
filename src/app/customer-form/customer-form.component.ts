@@ -59,7 +59,7 @@ export class CustomerFormComponent implements OnInit {
   ngOnInit(): void {
     let ssUser = window.sessionStorage.getItem("user");
 
-    if(!ssUser){
+    if (!ssUser) {
       this._route.navigateByUrl("/login");
     }
     this.messages = "";
@@ -177,7 +177,7 @@ export class CustomerFormComponent implements OnInit {
     tmpPhone = tmpPhone.replace(/\s+/g, '');
     tmpPhone = tmpPhone.replace(/[a-zA-Z]/g, '');
 
-    this.customerForm.patchValue({phone: tmpPhone});
+    this.customerForm.patchValue({ phone: tmpPhone });
 
     this.lenPhone = tmpPhone.length;
 
@@ -251,7 +251,14 @@ export class CustomerFormComponent implements OnInit {
         (res: any) => {
           this.isSubmit = false;
           this.messages = "Cập nhật thành công!";
-          setTimeout(() => { this.messages = ""; this._route.navigateByUrl("/"); }, 1500);
+          setTimeout(() => {
+            this.messages = "";
+            if (this.fromOrder) {
+              this._route.navigateByUrl("/order");
+            } else {
+              this._route.navigateByUrl("/");
+            }
+          }, 1500);
         }
       )
     } else {

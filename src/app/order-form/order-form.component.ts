@@ -602,6 +602,10 @@ export class OrderFormComponent implements OnInit {
       //   ignoreBackdropClick: true
       // });
 
+            
+      this.orderForm.patchValue({isEdit: true});
+
+
       this._gs.addOrder(postData).subscribe(
         (res: any) => {
           this.orderForm.patchValue({
@@ -688,6 +692,7 @@ export class OrderFormComponent implements OnInit {
       //   class: 'modal-lg',
       //   ignoreBackdropClick: true
       // });
+
 
       this._gs.editOrder(postData).subscribe(
         (res) => {
