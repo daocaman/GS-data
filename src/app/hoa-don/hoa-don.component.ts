@@ -23,9 +23,6 @@ export class HoaDonComponent implements OnInit {
 
   ngOnInit() {
 
-    //debug
-    console.log('\x1b[33m value :\x1b[0m',this.value);
-
     let tmp = this.value.orderDate.split("/");
     this.orderDate = new Date(parseInt(tmp[2]), parseInt(tmp[1]) - 1, parseInt(tmp[0]));
 
@@ -35,7 +32,7 @@ export class HoaDonComponent implements OnInit {
     return "Ngày " + (this.orderDate.getDate() + 1) + " tháng " + (this.orderDate.getMonth() + 1) + " năm " + this.orderDate.getFullYear();
   }
 
-  get sum(){
+  get sum() {
     let dg = (this.value.dgSP == "") ? 0 : parseInt(this.value.dgSP);
     let sl = (this.value.numSP == null) ? 1 : this.value.numSP;
 
@@ -53,9 +50,28 @@ export class HoaDonComponent implements OnInit {
     return tongTien;
   }
 
+  get detailOrder() {
+    let res = ""
+
+    res += (this.value.contentSP) ? "Ghi chữ: " + this.value.contentSP + ", " : "";
+    res += (this.value.muong) ? this.value.muong + " bộ muỗng dĩa, " : "";
+    res += (this.value.non) ? this.value.non + " Cái nón, " : "";
+    res += (this.value.phao) ? this.value.phao + " pháo sáng, Dao cắt bánh, " : "";
+    res += (this.value.nen) ? "Nến " + this.value.nen + ", " : "";
+    res += (this.value.bich) ? "Bịch ni lông, " : "";
+    res += (this.value.flan) ? this.value.flan + " flan, " : "";
+    res += (this.value.phomai) ? this.value.phomai + " phô mai, " : "";
+
+    res = res.trim();
+
+    if (res.charAt(res.length - 1) == ",") {
+      res = res.substring(0, res.length-1);
+    }
+
+    return res;
+  }
+
   closeModal() {
-    //debug
-    console.log('\x1b[33m test :\x1b[0m');
     this.bsModalRef.hide();
   }
 

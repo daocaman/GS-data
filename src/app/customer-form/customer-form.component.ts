@@ -175,6 +175,9 @@ export class CustomerFormComponent implements OnInit {
     let tmpPhone = this.customerForm.get("phone")?.value;
 
     tmpPhone = tmpPhone.replace(/\s+/g, '');
+    tmpPhone = tmpPhone.replace(/[a-zA-Z]/g, '');
+
+    this.customerForm.patchValue({phone: tmpPhone});
 
     this.lenPhone = tmpPhone.length;
 

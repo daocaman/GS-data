@@ -3,8 +3,8 @@
         <table class=" table-bordered border border-dark" style="font-size: 0.7rem;">
             <tbody>
                 <tr>
-                    <td rowspan="3" colspan="2" class="col-2">
-                        <img class="img-fluid p-1" src="assets/Logo.jpg" alt="Logo">
+                    <td rowspan="3" colspan="2" class="col-3 text-center">
+                        <img class="img-fluid p-1" style="height: 120px;" src="assets/Logo.jpg" alt="Logo">
                     </td>
                     <td colspan="5" class="text-center">
                         <b>Rau câu Gelli</b>
@@ -49,12 +49,12 @@
                 </tr>
                 <tr>
                     <td class="text-center">1</td>
-                    <td class="text-center">{{"Rau câu "+value.maDH+" - "+value.size+"cm"+" - "+value.khuon}}</td>
+                    <td class="text-center">{{"Rau câu "+value.maSP+" - "+value.size+"cm"+" - "+value.khuon}}</td>
                     <td class="text-center">{{value.dgSP|currency:'VND':''}}</td>
                     <td class="text-center">{{value.numSP}}</td>
                     <td class="text-center">{{value.dgSP * value.numSP |currency:'VND':''}}</td>
-                    <td class="text-center">{{value.contentSP}}</td>
-                    <td class="text-center">{{value.noteSP}}</td>
+                    <td class="text-center text-danger">{{detailOrder}}</td>
+                    <td class="text-center text-danger">{{value.noteSP}}</td>
                 </tr>
                 <tr>
                     <td class="text-center">2</td>

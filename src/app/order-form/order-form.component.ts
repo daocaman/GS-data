@@ -132,10 +132,8 @@ export class OrderFormComponent implements OnInit {
             this.getCustomer();
             window.localStorage.removeItem("newPhone");
           }
-          this.getSP();
-          this.orderForm.patchValue(
-            {dgSP: tmpForm.dgSP}
-          );
+          this.getSP(false);
+
           window.localStorage.removeItem("formOrder");
         }
       }
@@ -159,11 +157,11 @@ export class OrderFormComponent implements OnInit {
   }
 
   backPage() {
-    if (this._gs.previousURL) {
-      this._route.navigateByUrl(this._gs.previousURL);
-    } else {
-      this._route.navigateByUrl('/');
-    }
+    // if (this._gs.previousURL) {
+    //   this._route.navigateByUrl(this._gs.previousURL);
+    // } else {
+    this._route.navigateByUrl('/');
+    // }
   }
 
   caculateVat() {
@@ -528,8 +526,8 @@ export class OrderFormComponent implements OnInit {
               numSP: 1
             });
 
-            this.caculateMoney();
           }
+          this.caculateMoney();
           this.loadingSP = false;
         },
         (err) => {
@@ -609,6 +607,7 @@ export class OrderFormComponent implements OnInit {
           this.orderForm.patchValue({
             maDH: res.data
           })
+          postData = { ...{ maDH: res.data }, ...postData }
           this.isSubmit = false;
 
           this._dialog.openModal(HoaDonComponent, {
