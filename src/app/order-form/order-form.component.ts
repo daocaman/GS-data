@@ -580,13 +580,13 @@ export class OrderFormComponent implements OnInit {
         quan: this._gs.fee[dataForm.quan].quan,
         gioGiao: dataForm.gioGiao + "g" + (dataForm.phutGiao == "00" ? "" : "30"),
         noteGH: dataForm.noteGH,
-        feeShip: parseInt(dataForm.feeShip.replaceAll(",", "")),
+        feeShip: (dataForm.feeShip == "" || dataForm.feeShip == null) ? "" : parseInt(dataForm.feeShip.replaceAll(",", "")),
         numSP: dataForm.numSP,
-        dgSP: dataForm.dgSP ? parseInt(dataForm.dgSP.replaceAll(",", "")) : "",
-        sumPK: parseInt(dataForm.sumPK.replaceAll(",", "")),
-        VAT: dataForm.VAT ? parseInt(dataForm.VAT.replaceAll(",", "")) : "",
-        giam: dataForm.giam ? parseInt(dataForm.giam.replaceAll(",", "")) : "",
-        thanhTien: parseInt(dataForm.thanhTien.replaceAll(",", "")),
+        dgSP: (dataForm.dgSP == "" || dataForm.dgSP == null) ? "" : parseInt(dataForm.dgSP.replaceAll(",", "")),
+        sumPK: (dataForm.sumPK == "" || dataForm.sumPK == null) ? "" : parseInt(dataForm.sumPK.replaceAll(",", "")),
+        VAT: (dataForm.VAT == "" || dataForm.VAT == null) ? "" : parseInt(dataForm.VAT.replaceAll(",", "")),
+        giam: (dataForm.giam == "" || dataForm.giam == null) ? "" : parseInt(dataForm.giam.replaceAll(",", "")),
+        thanhTien: (dataForm.thanhTien == "" || dataForm.thanhTien == null) ? "" : parseInt(dataForm.thanhTien.replaceAll(",", "")),
         htThanhToan: dataForm.htThanhToan,
         isPaid: dataForm.isPaid ? 'Rồi' : 'Chưa',
         nguonKH: dataForm.nguonKH,
@@ -602,8 +602,8 @@ export class OrderFormComponent implements OnInit {
       //   ignoreBackdropClick: true
       // });
 
-            
-      this.orderForm.patchValue({isEdit: true});
+
+      this.orderForm.patchValue({ isEdit: true });
 
 
       this._gs.addOrder(postData).subscribe(
@@ -670,13 +670,13 @@ export class OrderFormComponent implements OnInit {
         quan: this._gs.fee[dataForm.quan].quan,
         gioGiao: dataForm.gioGiao + "g" + (dataForm.phutGiao == "00" ? "" : "30"),
         noteGH: dataForm.noteGH,
-        feeShip: parseInt(dataForm.feeShip.replaceAll(",", "")),
+        feeShip: (dataForm.feeShip == "" || dataForm.feeShip == null) ? "" : parseInt(dataForm.feeShip.replaceAll(",", "")),
         numSP: dataForm.numSP,
-        dgSP: parseInt(dataForm.dgSP.replaceAll(",", "")),
-        sumPK: parseInt(dataForm.sumPK.replaceAll(",", "")),
-        VAT: dataForm.VAT ? parseInt(dataForm.VAT.replaceAll(",", "")) : "",
-        giam: dataForm.giam ? parseInt(dataForm.giam.replaceAll(",", "")) : "",
-        thanhTien: parseInt(dataForm.thanhTien.replaceAll(",", "")),
+        dgSP: (dataForm.dgSP == "" || dataForm.dgSP == null) ? "" : parseInt(dataForm.dgSP.replaceAll(",", "")),
+        sumPK: (dataForm.sumPK == "" || dataForm.sumPK == null) ? "" : parseInt(dataForm.sumPK.replaceAll(",", "")),
+        VAT: (dataForm.VAT == "" || dataForm.VAT == null) ? "" : parseInt(dataForm.VAT.replaceAll(",", "")),
+        giam: (dataForm.giam == "" || dataForm.giam == null) ? "" : parseInt(dataForm.giam.replaceAll(",", "")),
+        thanhTien: (dataForm.thanhTien == "" || dataForm.thanhTien == null) ? "" : parseInt(dataForm.thanhTien.replaceAll(",", "")),
         htThanhToan: dataForm.htThanhToan,
         isPaid: dataForm.isPaid ? 'Rồi' : 'Chưa',
         nguonKH: dataForm.nguonKH,

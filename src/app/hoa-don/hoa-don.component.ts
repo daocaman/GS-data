@@ -22,7 +22,8 @@ export class HoaDonComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    //debug
+    console.log('\x1b[33m value  :\x1b[0m',this.value);
     let tmp = this.value.orderDate.split("/");
     this.orderDate = new Date(parseInt(tmp[2]), parseInt(tmp[1]) - 1, parseInt(tmp[0]));
 
