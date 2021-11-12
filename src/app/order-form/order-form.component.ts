@@ -76,7 +76,7 @@ export class OrderFormComponent implements OnInit {
     giam: new FormControl(''),
     thanhTien: new FormControl('', Validators.required),
     htThanhToan: new FormControl('Tiền mặt', Validators.required),
-    isPaid: new FormControl(false, Validators.required),
+    isPaid: new FormControl(false),
     noteDH: new FormControl('')
   })
 
@@ -609,9 +609,10 @@ export class OrderFormComponent implements OnInit {
       this._gs.addOrder(postData).subscribe(
         (res: any) => {
           this.orderForm.patchValue({
-            maDH: res.data
+            maDH: res.data.idDH
           })
-          postData = { ...{ maDH: res.data }, ...postData }
+          postData = { ...{ maDH: res.data.idDH }, ...postData };
+          this.editOrderId = res.data.row;
           this.isSubmit = false;
 
           this._dialog.openModal(HoaDonComponent, {

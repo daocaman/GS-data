@@ -43,7 +43,7 @@ export class GsService {
 
   currentURL = "";
 
-  deploy_key = "AKfycbxoJBo6RIbGliRTaHcVYq2KzpiMZsCOvPMwHewLPabyoeQg6ReFKbrmkdvrUKmm9OkVxA";
+  deploy_key = "AKfycbxf7Y9H1G3NJJCL5gttyijs4AD696k2Ud9UN4hpiZm33GUcGOfMYwNv78N4oHlwcRuISA";
 
   constructor(
     private _api: ApiService,

@@ -34,7 +34,7 @@
                     <td colspan="7">Địa chỉ: {{value.address+", "+value.phuong+", "+value.quan}}</td>
                 </tr>
                 <tr>
-                    <td colspan="4"> <span class="text-danger" *ngIf="value.noteGH">Giờ giao dự kiến: {{value.noteGH}}</span> </td>
+                    <td colspan="4" class="text-danger">Giờ giao dự kiến: {{value.gioGiao}} <span class="text-danger" *ngIf="value.noteGH">({{value.noteGH}})</span> </td>
                     <td colspan="3" class="text-center"><b>Thanh toán: {{value.htThanhToan}}</b></td>
                 </tr>
 
